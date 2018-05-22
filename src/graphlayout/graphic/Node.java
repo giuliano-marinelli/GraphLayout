@@ -3,7 +3,11 @@ package graphlayout.graphic;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-
+/**
+ *
+ * @author Giuliano Marinelli
+ * @param <Edge>
+ */
 public class Node<Edge> {
 
     private LinkedList<Edge> edges;

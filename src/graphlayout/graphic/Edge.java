@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Giuliano
+ * @author Giuliano Marinelli
  */
 public class Edge {
 
@@ -52,7 +52,7 @@ public class Edge {
     public void addContent(String info) {
         content.add(info);
     }
-    
+
     public int getDegree() {
         return Math.max(nodeOne.getDegree(), nodeTwo.getDegree());
     }

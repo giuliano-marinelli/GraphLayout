@@ -16,7 +16,7 @@ import static graphlayout.Reorganizer.graphCrossingNumber;
 
 /**
  *
- * @author Giuliano
+ * @author Giuliano Marinelli
  */
 public class GraphPainter extends JFrame implements ActionListener {
 

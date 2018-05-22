@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 /**
  *
- * @author Giuliano
+ * @author Giuliano Marinelli
  * @param <Node>
  * @param <Edge>
  */
@@ -46,5 +46,5 @@ public class Graph<Node, Edge> {
     public void addEdge(Edge edge) {
         edges.add(edge);
     }
-    
+
 }

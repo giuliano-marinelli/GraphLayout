@@ -6,7 +6,8 @@ import java.util.LinkedList;
 
 /**
  *
- * @author Giuliano
+ * @author Giuliano Marinelli
+ * @param <Edge>
  */
 public class NodeRectangle<Edge> extends Node {
 

@@ -26,7 +26,7 @@ import org.jdom2.output.XMLOutputter;
 
 /**
  *
- * @author Giuliano
+ * @author Giuliano Marinelli
  */
 public abstract class Reorganizer {
 
