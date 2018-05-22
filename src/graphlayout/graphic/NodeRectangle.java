@@ -1,6 +1,7 @@
 package graphlayout.graphic;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -9,7 +10,7 @@ import java.util.LinkedList;
  * @author Giuliano Marinelli
  * @param <Edge>
  */
-public class NodeRectangle<Edge> extends Node {
+public class NodeRectangle<Edge> extends Node implements Serializable {
 
     private Rectangle rectangle;
 
@@ -35,4 +36,10 @@ public class NodeRectangle<Edge> extends Node {
         this.rectangle = rectangle;
     }
 
+    /*@Override
+    protected Object clone() throws CloneNotSupportedException {
+        NodeRectangle<Edge> cloned = (NodeRectangle<Edge>) super.clone();
+        cloned.setRectangle((Rectangle) rectangle.clone());
+        return cloned;
+    }*/
 }

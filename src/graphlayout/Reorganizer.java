@@ -17,12 +17,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import graphlayout.graphic.*;
 import graphlayout.gui.GraphPainter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import tecladoIn.TecladoIn;
 
 /**
  *
@@ -34,6 +40,31 @@ public abstract class Reorganizer {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+        //TESTEO DE CLONACION
+        /*try {
+            Graph<NodeRectangle, EdgeMultiline> g1 = generateCompleteGraph(3);
+            spiralOptimization(g1);
+
+            Graph<NodeRectangle, EdgeMultiline> g2 = generateCompleteGraph(4);
+            spiralOptimization(g2);
+
+            Graph<NodeRectangle, EdgeMultiline> c1 = (Graph<NodeRectangle, EdgeMultiline>) copy(g1);
+
+            System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
+
+            System.out.println("SWAP 0,2 g2");
+            swapNodesOrder(g2, 0, 2);
+            System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
+
+            System.out.println("SWAP 1,2 c1");
+            swapNodesOrder(c1, 1, 2);
+            System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
+        } catch (IOException ex) {
+            Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
         Document xml = Reorganizer.reorganize("src/files/example2.uxf");
         /*try {
             XMLOutputter xmlOutput = new XMLOutputter();
@@ -47,7 +78,7 @@ public abstract class Reorganizer {
 
     public static Document reorganize(String file) {
         Document xml = null;
-        /*for (int i = 5; i <= 20; i++) {
+        /*for (int i = 5; i <= 25; i++) {
             System.out.print("K_" + i + " -> ");
 
             Graph graph = generateCompleteGraph(i);
@@ -73,6 +104,7 @@ public abstract class Reorganizer {
                 }
             }
         }*/
+
         int numNodes = 5;
         //Graph graphFile = importGraph(file);
         Graph graphComp = generateCompleteGraph(numNodes);
@@ -181,7 +213,7 @@ public abstract class Reorganizer {
         }*/
         //optimizaciones
         firstOptimization(graph);
-        secondOptimization(graph);
+        //secondOptimization(graph);
     }
 
     public static void firstOptimization(Graph<NodeRectangle, EdgeMultiline> graph) {
@@ -253,6 +285,115 @@ public abstract class Reorganizer {
                 }
             }
         }
+    }
+
+    public static void geneticOptimization(Graph<NodeRectangle, EdgeMultiline> graph) throws CloneNotSupportedException {
+        //Genera poblacion inicial
+        LinkedList<Graph<NodeRectangle, EdgeMultiline>> population = generatePopulation(graph);
+        System.out.println("    Population size: " + population.size());
+        int generation = 0;
+        boolean goal = false;
+        do {
+            //Los ordena por su fitness (evaluados por crossing number)
+            /*Collections.sort(population, new Comparator<Graph>() {
+            @Override
+            public int compare(Graph o1, Graph o2) {
+                int result = 0;
+                if (graphCrossingNumber(o1) < graphCrossingNumber(o2)) {
+                    result = -1;
+                } else if (graphCrossingNumber(o1) > graphCrossingNumber(o2)) {
+                    result = 1;
+                }
+                return result;
+            }
+            });*/
+            //Calcula el fitness total de la poblacion
+            /*int fitnessSum = 0;
+            for (Graph<NodeRectangle, EdgeMultiline> individual : population) {
+                fitnessSum += graphCrossingNumber(individual);
+            }*/
+            //Selecciona a la mitad de la poblacion con mayor fitness para ser padres
+            /*LinkedList<Graph<NodeRectangle, EdgeMultiline>> parents = new LinkedList<>();
+            for (int i = 0; i < population.size() / 2; i++) {
+                parents.add(population.get(i));
+            }*/
+            Random random = new Random();
+            int i = 0;
+            Graph<NodeRectangle, EdgeMultiline> individual;
+            while (i < population.size() && !goal) {
+                individual = population.get(i);
+                if (random.nextInt(1) < 30) {
+                    nodeOrderMutation(individual);
+                }
+                if (random.nextInt(1) < 10) {
+                    edgeCurveMutation(individual);
+                }
+                System.out.println("    Individual CN: " + graphCrossingNumber(individual));
+                if (graphCrossingNumber(individual) == 0) {
+                    goal = true;
+                    graph = individual;
+                }
+                i++;
+            }
+            generation++;
+        } while (generation < 10 && !goal);
+        System.out.println("    Generations: " + generation);
+        if (!goal) {
+            //Los ordena por su fitness (evaluados por crossing number)
+            Collections.sort(population, new Comparator<Graph>() {
+                @Override
+                public int compare(Graph o1, Graph o2) {
+                    int result = 0;
+                    if (graphCrossingNumber(o1) < graphCrossingNumber(o2)) {
+                        result = -1;
+                    } else if (graphCrossingNumber(o1) > graphCrossingNumber(o2)) {
+                        result = 1;
+                    }
+                    return result;
+                }
+            });
+            System.out.println("    first " + graphCrossingNumber(population.getFirst()) + " last " + graphCrossingNumber(population.getLast()));
+            System.out.println("    graph " + graphCrossingNumber(graph) + " individual " + graphCrossingNumber(population.getFirst()));
+            if (graphCrossingNumber(graph) > graphCrossingNumber(population.getFirst())) {
+                graph = population.getFirst();
+            }
+        }
+    }
+
+    private static LinkedList<Graph<NodeRectangle, EdgeMultiline>> generatePopulation(Graph<NodeRectangle, EdgeMultiline> graph) throws CloneNotSupportedException {
+        LinkedList<Graph<NodeRectangle, EdgeMultiline>> population = new LinkedList<>();
+        int numNodes = graph.getNodes().size();
+        /*CLONACION SE ESPERA QUE NO SE COMPORTE CORRECTAMENTE DEBIDO A LAS REFERENCIAS CRUZADAS*/
+        for (int i = 0; i < numNodes; i++) {
+            for (int j = i + 1; j < numNodes; j++) {
+                try {
+                    Graph<NodeRectangle, EdgeMultiline> neighbor = (Graph<NodeRectangle, EdgeMultiline>) copy(graph);
+                    swapNodesOrder(graph, i, j);
+                    population.add(neighbor);
+                } catch (IOException ex) {
+                    Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return population;
+    }
+
+    private static void nodeOrderMutation(Graph<NodeRectangle, EdgeMultiline> graph) {
+        Random random = new Random();
+        int indexOne = random.nextInt(graph.getNodes().size());
+        int indexTwo;
+        do {
+            indexTwo = random.nextInt(graph.getNodes().size());
+        } while (indexOne == indexTwo);
+        swapNodesOrder(graph, indexOne, indexTwo);
+    }
+
+    private static void edgeCurveMutation(Graph<NodeRectangle, EdgeMultiline> graph) {
+        Random random = new Random();
+        EdgeMultiline randEdge = graph.getEdges().get(random.nextInt(graph.getEdges().size()));
+        invertCurve(graph, Integer.parseInt(randEdge.getNodeOne().getContent().get(3) + ""), Integer.parseInt(randEdge.getNodeTwo().getContent().get(3) + ""));
     }
 
     public static int graphCrossingNumber(Graph<NodeRectangle, EdgeMultiline> graph) {
@@ -749,4 +890,30 @@ public abstract class Reorganizer {
             }
         }
     }
+
+    public static Object copy(final Serializable obj) throws IOException, ClassNotFoundException {
+        ObjectOutputStream out = null;
+        ObjectInputStream in = null;
+        Object copy = null;
+
+        try {
+            // write the object
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            out = new ObjectOutputStream(baos);
+            out.writeObject(obj);
+            out.flush();
+
+            // read in the copy
+            byte data[] = baos.toByteArray();
+            ByteArrayInputStream bais = new ByteArrayInputStream(data);
+            in = new ObjectInputStream(bais);
+            copy = in.readObject();
+        } finally {
+            out.close();
+            in.close();
+        }
+
+        return copy;
+    }
+
 }

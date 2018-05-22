@@ -13,6 +13,8 @@ import javax.swing.*;
 import graphlayout.graphic.*;
 import graphlayout.Reorganizer;
 import static graphlayout.Reorganizer.graphCrossingNumber;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +27,7 @@ public class GraphPainter extends JFrame implements ActionListener {
     private JButton btnRandomGraph = new JButton("Random");
     private JButton btnInvertNodes = new JButton("InvertN");
     private JButton btnInvertCurve = new JButton("InvertC");
+    private JButton btnGeneticOpt = new JButton("Genetic");
     private JTextField tfInvertOne = new JTextField("1");
     private JTextField tfInvertTwo = new JTextField("2");
     private JTextField tfAmountNodes = new JTextField("5");
@@ -43,6 +46,8 @@ public class GraphPainter extends JFrame implements ActionListener {
         btnInvertNodes.addActionListener(this);
         btnInvertCurve.setBounds(115, 35, 85, 20);
         btnInvertCurve.addActionListener(this);
+        btnGeneticOpt.setBounds(300, 10, 85, 20);
+        btnGeneticOpt.addActionListener(this);
         tfInvertOne.setBounds(205, 10, 20, 20);
         tfInvertTwo.setBounds(230, 10, 20, 20);
         tfAmountNodes.setBounds(205, 35, 45, 20);
@@ -53,6 +58,7 @@ public class GraphPainter extends JFrame implements ActionListener {
         pnl.add(btnRandomGraph);
         pnl.add(btnInvertNodes);
         pnl.add(btnInvertCurve);
+        pnl.add(btnGeneticOpt);
         pnl.add(tfInvertOne);
         pnl.add(tfInvertTwo);
         pnl.add(tfAmountNodes);
@@ -87,6 +93,14 @@ public class GraphPainter extends JFrame implements ActionListener {
             Reorganizer.invertCurve(graph, Integer.parseInt(tfInvertOne.getText()), Integer.parseInt(tfInvertTwo.getText()));
             System.out.println("CROSSING NUMBER INVERT CURVE = " + graphCrossingNumber(graph));
             repaint();
+        } else if (e.getSource() == btnGeneticOpt) {
+            try {
+                Reorganizer.geneticOptimization(graph);
+                System.out.println("CROSSING NUMBER GENETIC OPTIMIZATION = " + graphCrossingNumber(graph));
+                repaint();
+            } catch (CloneNotSupportedException ex) {
+                Logger.getLogger(GraphPainter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

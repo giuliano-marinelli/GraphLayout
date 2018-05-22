@@ -1,12 +1,13 @@
 package graphlayout.graphic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Giuliano Marinelli
  */
-public class Edge {
+public class Edge implements Serializable {
 
     private Node nodeOne;
     private Node nodeTwo;
@@ -57,4 +58,12 @@ public class Edge {
         return Math.max(nodeOne.getDegree(), nodeTwo.getDegree());
     }
 
+    /*@Override
+    protected Object clone() throws CloneNotSupportedException {
+        Edge cloned = (Edge) super.clone();
+        cloned.setNodeOne((Node) nodeOne.clone());
+        cloned.setNodeTwo((Node) nodeTwo.clone());
+        cloned.setContent((ArrayList<String>) content.clone());
+        return cloned;
+    }*/
 }

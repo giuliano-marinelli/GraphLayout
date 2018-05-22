@@ -1,5 +1,6 @@
 package graphlayout.graphic;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 /**
@@ -8,7 +9,7 @@ import java.util.LinkedList;
  * @param <Node>
  * @param <Edge>
  */
-public class Graph<Node, Edge> {
+public class Graph<Node, Edge> implements Serializable {
 
     private LinkedList<Node> nodes;
     private LinkedList<Edge> edges;
@@ -47,4 +48,11 @@ public class Graph<Node, Edge> {
         edges.add(edge);
     }
 
+    /*@Override
+    public Object clone() throws CloneNotSupportedException {
+        Graph<Node, Edge> cloned = (Graph<Node, Edge>) super.clone();
+        cloned.setNodes((LinkedList<Node>) nodes.clone());
+        cloned.setEdges((LinkedList<Edge>) edges.clone());
+        return cloned;
+    }*/
 }
