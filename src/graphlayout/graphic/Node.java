@@ -64,9 +64,9 @@ public class Node<Edge> implements Serializable {
         cloned.setContent((ArrayList<String>) content.clone());
         return cloned;
     }*/
-
     @Override
     public String toString() {
-        return content.get(0).split(" ")[1]+"|"+content.get(2)+"|"+content.get(3);
+        //PARA PROBAR
+        return content.get(0).split(" ")[1];//+"|"+content.get(2)+"|"+content.get(3);
     }
 }

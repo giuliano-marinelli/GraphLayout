@@ -43,86 +43,86 @@ public abstract class Reorganizer {
 
         //TESTEO DE CLONACION
         /*try {
-            Graph<NodeRectangle, EdgeMultiline> g1 = generateCompleteGraph(3);
-            spiralOptimization(g1);
+         Graph<NodeRectangle, EdgeMultiline> g1 = generateCompleteGraph(3);
+         spiralOptimization(g1);
 
-            Graph<NodeRectangle, EdgeMultiline> g2 = generateCompleteGraph(4);
-            spiralOptimization(g2);
+         Graph<NodeRectangle, EdgeMultiline> g2 = generateCompleteGraph(4);
+         spiralOptimization(g2);
 
-            Graph<NodeRectangle, EdgeMultiline> c1 = (Graph<NodeRectangle, EdgeMultiline>) copy(g1);
+         Graph<NodeRectangle, EdgeMultiline> c1 = (Graph<NodeRectangle, EdgeMultiline>) copy(g1);
 
-            System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
+         System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
 
-            System.out.println("SWAP 0,2 g2");
-            swapNodesOrder(g2, 0, 2);
-            System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
+         System.out.println("SWAP 0,2 g2");
+         swapNodesOrder(g2, 0, 2);
+         System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
 
-            System.out.println("SWAP 1,2 c1");
-            swapNodesOrder(c1, 1, 2);
-            System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
-        } catch (IOException ex) {
-            Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
-        Document xml = Reorganizer.reorganize("src/files/example2.uxf");
+         System.out.println("SWAP 1,2 c1");
+         swapNodesOrder(c1, 1, 2);
+         System.out.println("g1=" + g1.getNodes().toString() + "\nc1=" + c1.getNodes().toString() + "\ng2=" + g2.getNodes().toString());
+         } catch (IOException ex) {
+         Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (ClassNotFoundException ex) {
+         Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
+        Document xml = Reorganizer.reorganize("src/files/example.uxf");
         /*try {
-            XMLOutputter xmlOutput = new XMLOutputter();
-            xmlOutput.setFormat(Format.getPrettyFormat());
-            xmlOutput.output(xml, new FileWriter("src/files/nuevo.uxf"));
-        } catch (IOException ex) {
-            System.err.println("A problem in the creation of XML (.uxf) file.");
-            Logger.getLogger(ERExporter.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+         XMLOutputter xmlOutput = new XMLOutputter();
+         xmlOutput.setFormat(Format.getPrettyFormat());
+         xmlOutput.output(xml, new FileWriter("src/files/nuevo.uxf"));
+         } catch (IOException ex) {
+         System.err.println("A problem in the creation of XML (.uxf) file.");
+         Logger.getLogger(ERExporter.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
     }
 
     public static Document reorganize(String file) {
         Document xml = null;
         /*for (int i = 5; i <= 25; i++) {
-            System.out.print("K_" + i + " -> ");
+         System.out.print("K_" + i + " -> ");
 
-            Graph graph = generateCompleteGraph(i);
-            spiralOptimization(graph);
-            int obtCr = graphCrossingNumber(graph);
+         Graph graph = generateCompleteGraph(i);
+         spiralOptimization(graph);
+         int obtCr = graphCrossingNumber(graph);
 
-            double p = i;
-            int cr = (int) ((1.0 / 4.0) * Math.floor(p / 2) * Math.floor((p - 1) / 2) * Math.floor((p - 2) / 2) * Math.floor((p - 3) / 2));
+         double p = i;
+         int cr = (int) ((1.0 / 4.0) * Math.floor(p / 2) * Math.floor((p - 1) / 2) * Math.floor((p - 2) / 2) * Math.floor((p - 3) / 2));
 
-            if (cr == obtCr) {
-                System.out.println("CROSSING NUMBER = " + obtCr + " = " + cr);
-            } else {
-                System.out.println((char) 27 + "[31m" + "CROSSING NUMBER = " + obtCr + " != " + cr);
-            }
-            for (int j = 0; j < 10; j++) {
-                Graph randGraph = generateRandomGraph(i);
-                spiralOptimization(randGraph);
-                int randCr = graphCrossingNumber(randGraph);
-                if (randCr <= cr) {
-                    System.out.println("    CROSSING NUMBER RAND = " + randCr + " <= " + cr);
-                } else {
-                    System.out.println((char) 27 + "[31m" + "    CROSSING NUMBER RAND = " + randCr + " > " + cr);
-                }
-            }
-        }*/
+         if (cr == obtCr) {
+         System.out.println("CROSSING NUMBER = " + obtCr + " = " + cr);
+         } else {
+         System.out.println((char) 27 + "[31m" + "CROSSING NUMBER = " + obtCr + " != " + cr);
+         }
+         for (int j = 0; j < 10; j++) {
+         Graph randGraph = generateRandomGraph(i);
+         spiralOptimization(randGraph);
+         int randCr = graphCrossingNumber(randGraph);
+         if (randCr <= cr) {
+         System.out.println("    CROSSING NUMBER RAND = " + randCr + " <= " + cr);
+         } else {
+         System.out.println((char) 27 + "[31m" + "    CROSSING NUMBER RAND = " + randCr + " > " + cr);
+         }
+         }
+         }*/
 
         int numNodes = 5;
         //Graph graphFile = importGraph(file);
-        Graph graphComp = generateCompleteGraph(numNodes);
-        //Graph graphRandom = generateRandomGraph(numNodes);
+        //Graph graphComp = generateCompleteGraph(numNodes);
+        Graph graphRandom = generateRandomGraph(numNodes);
         //spiralOptimization(graphFile);
-        spiralOptimization(graphComp);
-        //spiralOptimization(graphRandom);
-        //System.out.println("CROSSING NUMBER FILE = " + calculateCrossingNumber(graphFile));
-        System.out.println("CROSSING NUMBER COMPLETE = " + graphCrossingNumber(graphComp));
-        //System.out.println("CROSSING NUMBER RANDOM = " + graphCrossingNumber(graphRandom));
+        //spiralOptimization(graphComp);
+        spiralOptimization(graphRandom);
+        //System.out.println("CROSSING NUMBER FILE = " + graphCrossingNumber(graphFile));
+        //System.out.println("CROSSING NUMBER COMPLETE = " + graphCrossingNumber(graphComp));
+        System.out.println("CROSSING NUMBER RANDOM = " + graphCrossingNumber(graphRandom));
         //GraphPainter graphPainterFile = new GraphPainter(graphFile);
-        //GraphPainter graphPainterRandom = new GraphPainter(graphRandom);
-        GraphPainter graphPainterComp = new GraphPainter(graphComp);
+        GraphPainter graphPainterRandom = new GraphPainter(graphRandom);
+        //GraphPainter graphPainterComp = new GraphPainter(graphComp);
         //GraphPainter graphPainterComp = new GraphPainter(graphComp, graphPainterFile);
         //GraphPainter graphPainterComp = new GraphPainter(graphComp, graphPainterRandom);
-        /*if (reorganize(graph)) {
+        /*if (reorganize(graphFile)) {
             System.out.println("Graph reorganized.");
-            xml = exportGraph(graph);
+            xml = exportGraph(graphFile);
         } else {
             System.err.println("There was a mistake.");
         }*/
@@ -148,10 +148,10 @@ public abstract class Reorganizer {
             public int compare(NodeRectangle o1, NodeRectangle o2) {
                 int result = 0;
                 /*if (o1.getEdges().size() < o2.getEdges().size()) {
-                    result = -1;
-                } else if (o1.getEdges().size() > o2.getEdges().size()) {
-                    result = 1;
-                }*/
+                 result = -1;
+                 } else if (o1.getEdges().size() > o2.getEdges().size()) {
+                 result = 1;
+                 }*/
                 if (getNodeLevel(o1) < getNodeLevel(o2)) {
                     result = -1;
                 } else if (getNodeLevel(o1) > getNodeLevel(o2)) {
@@ -199,18 +199,18 @@ public abstract class Reorganizer {
         graph.setNodes(nodes);
 
         /*for (NodeRectangle node : nodes) {
-            System.out.print(node.getContent().get(0));
-            System.out.print(" -> I(" + nodes.indexOf(node) + ")");
-            System.out.print(" -> O(" + node.getContent().get(3) + ")");
-            System.out.print(" -> EDG(" + node.getEdges().size() + ")");
-            System.out.println(" -> " + ((node.getContent().get(2).equals("1")) ? "arriba" : "abajo"));
+         System.out.print(node.getContent().get(0));
+         System.out.print(" -> I(" + nodes.indexOf(node) + ")");
+         System.out.print(" -> O(" + node.getContent().get(3) + ")");
+         System.out.print(" -> EDG(" + node.getEdges().size() + ")");
+         System.out.println(" -> " + ((node.getContent().get(2).equals("1")) ? "arriba" : "abajo"));
 
-            edges = node.getEdges();
-            for (EdgeMultiline edge : edges) {
-                System.out.print("    [" + edge.getContent().get(0));
-                System.out.println(", " + ((edge.getContent().get(1).equals("1")) ? "arriba" : "abajo") + "]");
-            }
-        }*/
+         edges = node.getEdges();
+         for (EdgeMultiline edge : edges) {
+         System.out.print("    [" + edge.getContent().get(0));
+         System.out.println(", " + ((edge.getContent().get(1).equals("1")) ? "arriba" : "abajo") + "]");
+         }
+         }*/
         //optimizaciones
         firstOptimization(graph);
         //secondOptimization(graph);
@@ -287,57 +287,64 @@ public abstract class Reorganizer {
         }
     }
 
-    public static void geneticOptimization(Graph<NodeRectangle, EdgeMultiline> graph) throws CloneNotSupportedException {
+    public static Graph geneticOptimization(Graph<NodeRectangle, EdgeMultiline> graph) throws CloneNotSupportedException {
+        //return firstGeneticOptimization(graph);
+        return secondGeneticOptimization(graph);
+    }
+
+    private static Graph firstGeneticOptimization(Graph<NodeRectangle, EdgeMultiline> graph) throws CloneNotSupportedException {
         //Genera poblacion inicial
+        Graph<NodeRectangle, EdgeMultiline> optGraph = graph;
         LinkedList<Graph<NodeRectangle, EdgeMultiline>> population = generatePopulation(graph);
-        System.out.println("    Population size: " + population.size());
         int generation = 0;
         boolean goal = false;
         do {
             //Los ordena por su fitness (evaluados por crossing number)
             /*Collections.sort(population, new Comparator<Graph>() {
-            @Override
-            public int compare(Graph o1, Graph o2) {
-                int result = 0;
-                if (graphCrossingNumber(o1) < graphCrossingNumber(o2)) {
-                    result = -1;
-                } else if (graphCrossingNumber(o1) > graphCrossingNumber(o2)) {
-                    result = 1;
-                }
-                return result;
-            }
-            });*/
+             @Override
+             public int compare(Graph o1, Graph o2) {
+             int result = 0;
+             if (graphCrossingNumber(o1) < graphCrossingNumber(o2)) {
+             result = -1;
+             } else if (graphCrossingNumber(o1) > graphCrossingNumber(o2)) {
+             result = 1;
+             }
+             return result;
+             }
+             });*/
             //Calcula el fitness total de la poblacion
             /*int fitnessSum = 0;
-            for (Graph<NodeRectangle, EdgeMultiline> individual : population) {
-                fitnessSum += graphCrossingNumber(individual);
-            }*/
+             for (Graph<NodeRectangle, EdgeMultiline> individual : population) {
+             fitnessSum += graphCrossingNumber(individual);
+             }*/
             //Selecciona a la mitad de la poblacion con mayor fitness para ser padres
             /*LinkedList<Graph<NodeRectangle, EdgeMultiline>> parents = new LinkedList<>();
-            for (int i = 0; i < population.size() / 2; i++) {
-                parents.add(population.get(i));
-            }*/
+             for (int i = 0; i < population.size() / 2; i++) {
+             parents.add(population.get(i));
+             }*/
             Random random = new Random();
             int i = 0;
             Graph<NodeRectangle, EdgeMultiline> individual;
             while (i < population.size() && !goal) {
                 individual = population.get(i);
-                if (random.nextInt(1) < 30) {
+                if (random.nextDouble() < 0.3) {
                     nodeOrderMutation(individual);
                 }
-                if (random.nextInt(1) < 10) {
+                if (random.nextDouble() < 0.1) {
                     edgeCurveMutation(individual);
                 }
-                System.out.println("    Individual CN: " + graphCrossingNumber(individual));
+                //System.out.println("    Individual CN: " + graphCrossingNumber(individual));
                 if (graphCrossingNumber(individual) == 0) {
                     goal = true;
-                    graph = individual;
+                    System.out.println(graph.getNodes().toString());
+                    optGraph = individual;
+
+                    System.out.println("    Goal: " + individual.getNodes().toString());
                 }
                 i++;
             }
             generation++;
-        } while (generation < 10 && !goal);
-        System.out.println("    Generations: " + generation);
+        } while (generation < 1000 && !goal);
         if (!goal) {
             //Los ordena por su fitness (evaluados por crossing number)
             Collections.sort(population, new Comparator<Graph>() {
@@ -352,12 +359,69 @@ public abstract class Reorganizer {
                     return result;
                 }
             });
-            System.out.println("    first " + graphCrossingNumber(population.getFirst()) + " last " + graphCrossingNumber(population.getLast()));
-            System.out.println("    graph " + graphCrossingNumber(graph) + " individual " + graphCrossingNumber(population.getFirst()));
+            //System.out.println("    first " + graphCrossingNumber(population.getFirst()) + " last " + graphCrossingNumber(population.getLast()));
+            //System.out.println("    graph " + graphCrossingNumber(graph) + " individual " + graphCrossingNumber(population.getFirst()));
             if (graphCrossingNumber(graph) > graphCrossingNumber(population.getFirst())) {
-                graph = population.getFirst();
+                optGraph = population.getFirst();
             }
         }
+        System.out.println("    Population size: " + population.size());
+        System.out.println("    Best: " + optGraph.getNodes().toString());
+        System.out.println("    Generations: " + generation);
+        return optGraph;
+    }
+
+    private static Graph secondGeneticOptimization(Graph<NodeRectangle, EdgeMultiline> graph) throws CloneNotSupportedException {
+        //Genera poblacion inicial
+        Graph<NodeRectangle, EdgeMultiline> optGraph = graph;
+        int generation = 0;
+        boolean goal = false;
+        LinkedList<Graph<NodeRectangle, EdgeMultiline>> population;
+        do {
+            population = generatePopulation(optGraph);
+            Random random = new Random();
+            int i = 0;
+            Graph<NodeRectangle, EdgeMultiline> individual;
+            while (i < population.size() && !goal) {
+                individual = population.get(i);
+                if (random.nextDouble() < 0.3) {
+                    nodeOrderMutation(individual);
+                }
+                if (random.nextDouble() < 0.1) {
+                    edgeCurveMutation(individual);
+                }
+                //System.out.println("    Individual CN: " + graphCrossingNumber(individual));
+                if (graphCrossingNumber(individual) == 0) {
+                    goal = true;
+                    optGraph = individual;
+                    System.out.println("    Goal: " + individual.getNodes().toString());
+                }
+                i++;
+            }
+            if (!goal) {
+                //Los ordena por su fitness (evaluados por crossing number)
+                Collections.sort(population, new Comparator<Graph>() {
+                    @Override
+                    public int compare(Graph o1, Graph o2) {
+                        int result = 0;
+                        if (graphCrossingNumber(o1) < graphCrossingNumber(o2)) {
+                            result = -1;
+                        } else if (graphCrossingNumber(o1) > graphCrossingNumber(o2)) {
+                            result = 1;
+                        }
+                        return result;
+                    }
+                });
+                if (graphCrossingNumber(graph) > graphCrossingNumber(population.getFirst())) {
+                    optGraph = population.getFirst();
+                }
+            }
+            generation++;
+        } while (generation < 100 && !goal);
+        System.out.println("    Population size: " + population.size());
+        System.out.println("    Best: " + optGraph.getNodes().toString());
+        System.out.println("    Generations: " + generation);
+        return optGraph;
     }
 
     private static LinkedList<Graph<NodeRectangle, EdgeMultiline>> generatePopulation(Graph<NodeRectangle, EdgeMultiline> graph) throws CloneNotSupportedException {
@@ -412,11 +476,11 @@ public abstract class Reorganizer {
                             && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                             && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)) {
                         /*System.out.println(
-                                Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) + "<" + Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
-                                + " && " + Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) + "<" + Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
-                                + " && " + Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) + ">" + Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
-                        );
-                        System.out.println("    +1 cruce");*/
+                         Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) + "<" + Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
+                         + " && " + Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) + "<" + Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
+                         + " && " + Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) + ">" + Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
+                         );
+                         System.out.println("    +1 cruce");*/
                         cross++;
                     }
                 }
@@ -463,8 +527,8 @@ public abstract class Reorganizer {
                 if ((Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                         && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                         && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)) /*|| (Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
-                        && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
-                        && Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo) > Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo))*/) {
+                         && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
+                         && Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo) > Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo))*/) {
                     crossEdges.add(edgeTwo);
                 }
             }
@@ -518,20 +582,20 @@ public abstract class Reorganizer {
                     }
                 }
                 /*} else { //Es diagonal
-                    if (difY > 0) { //Abajo
-                        if (difX > 0) { //Abajo-Derecha
-                            fromPoint.setLocation(rectangle.getCenterX() + rectangle.getWidth() / 2, rectangle.getCenterY() + rectangle.getHeight() / 2);
-                        } else { //Abajo-Izquierda
-                            fromPoint.setLocation(rectangle.getCenterX() - rectangle.getWidth() / 2, rectangle.getCenterY() + rectangle.getHeight() / 2);
-                        }
-                    } else { //Arriba
-                        if (difX > 0) { //Arriba-Derecha
-                            fromPoint.setLocation(rectangle.getCenterX() + rectangle.getWidth() / 2, rectangle.getCenterY() - rectangle.getHeight() / 2);
-                        } else { //Arriba-Izquierda
-                            fromPoint.setLocation(rectangle.getCenterX() - rectangle.getWidth() / 2, rectangle.getCenterY() - rectangle.getHeight() / 2);
-                        }
-                    }
-                }*/
+                 if (difY > 0) { //Abajo
+                 if (difX > 0) { //Abajo-Derecha
+                 fromPoint.setLocation(rectangle.getCenterX() + rectangle.getWidth() / 2, rectangle.getCenterY() + rectangle.getHeight() / 2);
+                 } else { //Abajo-Izquierda
+                 fromPoint.setLocation(rectangle.getCenterX() - rectangle.getWidth() / 2, rectangle.getCenterY() + rectangle.getHeight() / 2);
+                 }
+                 } else { //Arriba
+                 if (difX > 0) { //Arriba-Derecha
+                 fromPoint.setLocation(rectangle.getCenterX() + rectangle.getWidth() / 2, rectangle.getCenterY() - rectangle.getHeight() / 2);
+                 } else { //Arriba-Izquierda
+                 fromPoint.setLocation(rectangle.getCenterX() - rectangle.getWidth() / 2, rectangle.getCenterY() - rectangle.getHeight() / 2);
+                 }
+                 }
+                 }*/
                 System.out.println("fromPoint: " + fromPoint.getX() + "," + fromPoint.getY());
                 fromPoint.setLocation(((int) ((fromPoint.getX() + 5) / 10)) * 10, ((int) ((fromPoint.getY() + 5) / 10)) * 10);
                 System.out.println("    fromPoint: " + fromPoint.getX() + "," + fromPoint.getY());

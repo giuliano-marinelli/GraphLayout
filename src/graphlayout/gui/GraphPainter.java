@@ -15,6 +15,7 @@ import graphlayout.Reorganizer;
 import static graphlayout.Reorganizer.graphCrossingNumber;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
 
 /**
  *
@@ -82,20 +83,23 @@ public class GraphPainter extends JFrame implements ActionListener {
                 repaint();
                 System.out.println("CROSSING NUMBER RANDOM INVERT NODES (1,2) = " + graphCrossingNumber(graph));
             } else {*/
-            System.out.println("CROSSING NUMBER RANDOM = " + graphCrossingNumber(graph));
+            System.out.println("CROSSING NUMBER RANDOM GRAPH = " + graphCrossingNumber(graph));
+            System.out.println(graph.getNodes().toString());
             //}
             repaint();
         } else if (e.getSource() == btnInvertNodes) {
             Reorganizer.swapNodesOrder(graph, Integer.parseInt(tfInvertOne.getText()), Integer.parseInt(tfInvertTwo.getText()));
             System.out.println("CROSSING NUMBER INVERT NODES = " + graphCrossingNumber(graph));
+            System.out.println(graph.getNodes().toString());
             repaint();
         } else if (e.getSource() == btnInvertCurve) {
             Reorganizer.invertCurve(graph, Integer.parseInt(tfInvertOne.getText()), Integer.parseInt(tfInvertTwo.getText()));
             System.out.println("CROSSING NUMBER INVERT CURVE = " + graphCrossingNumber(graph));
+            System.out.println(graph.getNodes().toString());
             repaint();
         } else if (e.getSource() == btnGeneticOpt) {
             try {
-                Reorganizer.geneticOptimization(graph);
+                graph = Reorganizer.geneticOptimization(graph);
                 System.out.println("CROSSING NUMBER GENETIC OPTIMIZATION = " + graphCrossingNumber(graph));
                 repaint();
             } catch (CloneNotSupportedException ex) {
@@ -204,7 +208,7 @@ public class GraphPainter extends JFrame implements ActionListener {
             for (NodeRectangle node : nodes) {
                 g.setColor(Color.BLACK);
                 g.drawOval(i * getWidth() / (nodes.size() + 1) - 7, getHeight() / 2 - 7, 14, 14);
-                g.drawString((String) node.getContent().get(3), i * getWidth() / (nodes.size() + 1) - 3, getHeight() / 2 + 4);
+                g.drawString(((String) node.getContent().get(0)).split(" ")[1], i * getWidth() / (nodes.size() + 1) - 3, getHeight() / 2 + 4);
                 i++;
             }
 
