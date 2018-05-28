@@ -1,7 +1,7 @@
 package graphlayout.graphic;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -12,18 +12,18 @@ import java.util.LinkedList;
 public class Node<Edge> implements Serializable {
 
     private LinkedList<Edge> edges;
-    private ArrayList<String> content;
+    private HashMap<String, String> content;
 
     public Node() {
         edges = new LinkedList<>();
     }
 
-    public Node(ArrayList<String> content) {
+    public Node(HashMap<String, String> content) {
         this();
         this.content = content;
     }
 
-    public Node(LinkedList<Edge> edges, ArrayList<String> content) {
+    public Node(LinkedList<Edge> edges, HashMap<String, String> content) {
         this();
         this.edges = edges;
         this.content = content;
@@ -41,16 +41,12 @@ public class Node<Edge> implements Serializable {
         edges.add(edge);
     }
 
-    public ArrayList<String> getContent() {
+    public HashMap<String, String> getContent() {
         return content;
     }
 
-    public void setContent(ArrayList<String> content) {
+    public void setContent(HashMap<String, String> content) {
         this.content = content;
-    }
-
-    public void addContent(String info) {
-        content.add(info);
     }
 
     public int getDegree() {
@@ -58,15 +54,15 @@ public class Node<Edge> implements Serializable {
     }
 
     /*@Override
-    protected Object clone() throws CloneNotSupportedException {
-        Node<Edge> cloned = (Node<Edge>) super.clone();
-        cloned.setEdges((LinkedList<Edge>) edges.clone());
-        cloned.setContent((ArrayList<String>) content.clone());
-        return cloned;
-    }*/
+     protected Object clone() throws CloneNotSupportedException {
+     Node<Edge> cloned = (Node<Edge>) super.clone();
+     cloned.setEdges((LinkedList<Edge>) edges.clone());
+     cloned.setContent((ArrayList<String>) content.clone());
+     return cloned;
+     }*/
     @Override
     public String toString() {
         //PARA PROBAR
-        return content.get(0).split(" ")[1];//+"|"+content.get(2)+"|"+content.get(3);
+        return content.get("name");//+"|"+content.get(2)+"|"+content.get(3);
     }
 }

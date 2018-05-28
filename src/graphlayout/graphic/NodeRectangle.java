@@ -3,6 +3,7 @@ package graphlayout.graphic;
 import java.awt.Rectangle;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -18,12 +19,12 @@ public class NodeRectangle<Edge> extends Node implements Serializable {
         this.rectangle = rectangle;
     }
 
-    public NodeRectangle(Rectangle rectangle, ArrayList content) {
+    public NodeRectangle(Rectangle rectangle, HashMap<String, String> content) {
         super(content);
         this.rectangle = rectangle;
     }
 
-    public NodeRectangle(Rectangle rectangle, LinkedList edges, ArrayList content) {
+    public NodeRectangle(Rectangle rectangle, LinkedList<Edge> edges, HashMap<String, String> content) {
         super(edges, content);
         this.rectangle = rectangle;
     }
@@ -37,9 +38,9 @@ public class NodeRectangle<Edge> extends Node implements Serializable {
     }
 
     /*@Override
-    protected Object clone() throws CloneNotSupportedException {
-        NodeRectangle<Edge> cloned = (NodeRectangle<Edge>) super.clone();
-        cloned.setRectangle((Rectangle) rectangle.clone());
-        return cloned;
-    }*/
+     protected Object clone() throws CloneNotSupportedException {
+     NodeRectangle<Edge> cloned = (NodeRectangle<Edge>) super.clone();
+     cloned.setRectangle((Rectangle) rectangle.clone());
+     return cloned;
+     }*/
 }

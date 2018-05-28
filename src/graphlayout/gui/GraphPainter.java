@@ -1,5 +1,7 @@
 package graphlayout.gui;
 
+import graphlayout.Reorganizer;
+import graphlayout.graphic.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
@@ -10,9 +12,6 @@ import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.*;
-import graphlayout.graphic.*;
-import graphlayout.Reorganizer;
-import static graphlayout.Reorganizer.graphCrossingNumber;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
@@ -29,6 +28,7 @@ public class GraphPainter extends JFrame implements ActionListener {
     private JButton btnInvertNodes = new JButton("InvertN");
     private JButton btnInvertCurve = new JButton("InvertC");
     private JButton btnGeneticOpt = new JButton("Genetic");
+    private JButton btnCompleteGraph = new JButton("Complete");
     private JTextField tfInvertOne = new JTextField("1");
     private JTextField tfInvertTwo = new JTextField("2");
     private JTextField tfAmountNodes = new JTextField("5");
@@ -49,6 +49,8 @@ public class GraphPainter extends JFrame implements ActionListener {
         btnInvertCurve.addActionListener(this);
         btnGeneticOpt.setBounds(300, 10, 85, 20);
         btnGeneticOpt.addActionListener(this);
+        btnCompleteGraph.setBounds(300, 35, 85, 20);
+        btnCompleteGraph.addActionListener(this);
         tfInvertOne.setBounds(205, 10, 20, 20);
         tfInvertTwo.setBounds(230, 10, 20, 20);
         tfAmountNodes.setBounds(205, 35, 45, 20);
@@ -60,6 +62,7 @@ public class GraphPainter extends JFrame implements ActionListener {
         pnl.add(btnInvertNodes);
         pnl.add(btnInvertCurve);
         pnl.add(btnGeneticOpt);
+        pnl.add(btnCompleteGraph);
         pnl.add(tfInvertOne);
         pnl.add(tfInvertTwo);
         pnl.add(tfAmountNodes);
@@ -77,37 +80,45 @@ public class GraphPainter extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnRandomGraph) {
             graph = Reorganizer.generateRandomGraph(Integer.parseInt(tfAmountNodes.getText()));
-            Reorganizer.spiralOptimization(graph);
+            Reorganizer.linearOptimization(graph);
             /* if (graphCrossingNumber(graph) == 1 && graph.getNodes().size() == 5) {
-                Reorganizer.swapNodesOrder(graph, 1, 2);
-                repaint();
-                System.out.println("CROSSING NUMBER RANDOM INVERT NODES (1,2) = " + graphCrossingNumber(graph));
-            } else {*/
-            System.out.println("CROSSING NUMBER RANDOM GRAPH = " + graphCrossingNumber(graph));
-            System.out.println(graph.getNodes().toString());
+             Reorganizer.swapNodesOrder(graph, 1, 2);
+             repaint();
+             System.out.println("CROSSING NUMBER RANDOM INVERT NODES (1,2) = " + graphCrossingNumber(graph));
+             } else {*/
+            System.out.println("    " + graph.getNodes().toString());
+            System.out.println("CROSSING NUMBER RANDOM GRAPH = " + Reorganizer.graphCrossingNumber(graph));
             //}
             repaint();
         } else if (e.getSource() == btnInvertNodes) {
             Reorganizer.swapNodesOrder(graph, Integer.parseInt(tfInvertOne.getText()), Integer.parseInt(tfInvertTwo.getText()));
-            System.out.println("CROSSING NUMBER INVERT NODES = " + graphCrossingNumber(graph));
-            System.out.println(graph.getNodes().toString());
+            System.out.println("    " + graph.getNodes().toString());
+            System.out.println("CROSSING NUMBER INVERT NODES = " + Reorganizer.graphCrossingNumber(graph));
             repaint();
         } else if (e.getSource() == btnInvertCurve) {
             Reorganizer.invertCurve(graph, Integer.parseInt(tfInvertOne.getText()), Integer.parseInt(tfInvertTwo.getText()));
-            System.out.println("CROSSING NUMBER INVERT CURVE = " + graphCrossingNumber(graph));
-            System.out.println(graph.getNodes().toString());
+            System.out.println("    " + graph.getNodes().toString());
+            System.out.println("CROSSING NUMBER INVERT CURVE = " + Reorganizer.graphCrossingNumber(graph));
             repaint();
         } else if (e.getSource() == btnGeneticOpt) {
             try {
                 graph = Reorganizer.geneticOptimization(graph);
-                System.out.println("CROSSING NUMBER GENETIC OPTIMIZATION = " + graphCrossingNumber(graph));
+                System.out.println("CROSSING NUMBER GENETIC OPTIMIZATION = " + Reorganizer.graphCrossingNumber(graph));
                 repaint();
             } catch (CloneNotSupportedException ex) {
                 Logger.getLogger(GraphPainter.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else if (e.getSource() == btnCompleteGraph) {
+            graph = Reorganizer.generateCompleteGraph(Integer.parseInt(tfAmountNodes.getText()));
+            Reorganizer.linearOptimization(graph);
+            System.out.println("    " + graph.getNodes().toString());
+            System.out.println("CROSSING NUMBER COMPLETE GRAPH = " + Reorganizer.graphCrossingNumber(graph) + " | REAL: " + Reorganizer.completeGraphCrossingNumber(graph.getNodes().size()));
+            repaint();
         }
+        System.out.println();
     }
 
+    @Override
     public void paint(Graphics g) {
         g.clearRect(0, 100, (int) getWidth(), (int) getHeight());
 
@@ -158,9 +169,9 @@ public class GraphPainter extends JFrame implements ActionListener {
                     break;
             }
 
-            boolean isTop = ((edge.getContent().get(1).equals("1")));
-            int ordEdgeNodeOne = Integer.parseInt(edge.getNodeOne().getContent().get(3) + "");
-            int ordEdgeNodeTwo = Integer.parseInt(edge.getNodeTwo().getContent().get(3) + "");
+            boolean isTop = ((edge.getContent().get("isTop").equals("1")));
+            int ordEdgeNodeOne = Integer.parseInt(edge.getNodeOne().getContent().get("order") + "");
+            int ordEdgeNodeTwo = Integer.parseInt(edge.getNodeTwo().getContent().get("order") + "");
             int distance = Math.abs(ordEdgeNodeOne - ordEdgeNodeTwo) * getWidth() / (nodes.size() + 1);
             int x = (Math.min(ordEdgeNodeOne, ordEdgeNodeTwo) + 1) * getWidth() / (nodes.size() + 1);
             int y = (getHeight() / 2) - (distance / 2);
@@ -180,9 +191,9 @@ public class GraphPainter extends JFrame implements ActionListener {
 
                 for (EdgeMultiline crossEdge : crossEdges) {
                     //System.out.println("-----------");
-                    boolean crossIsTop = ((crossEdge.getContent().get(1).equals("1")));
-                    int crossOrdEdgeNodeOne = Integer.parseInt(crossEdge.getNodeOne().getContent().get(3) + "");
-                    int crossOrdEdgeNodeTwo = Integer.parseInt(crossEdge.getNodeTwo().getContent().get(3) + "");
+                    boolean crossIsTop = ((crossEdge.getContent().get("isTop").equals("1")));
+                    int crossOrdEdgeNodeOne = Integer.parseInt(crossEdge.getNodeOne().getContent().get("order") + "");
+                    int crossOrdEdgeNodeTwo = Integer.parseInt(crossEdge.getNodeTwo().getContent().get("order") + "");
                     int crossDistance = Math.abs(crossOrdEdgeNodeOne - crossOrdEdgeNodeTwo) * getWidth() / (nodes.size() + 1);
                     int crossX = (Math.min(crossOrdEdgeNodeOne, crossOrdEdgeNodeTwo) + 1) * getWidth() / (nodes.size() + 1);
                     int crossY = (getHeight() / 2) - (crossDistance / 2);
@@ -208,7 +219,7 @@ public class GraphPainter extends JFrame implements ActionListener {
             for (NodeRectangle node : nodes) {
                 g.setColor(Color.BLACK);
                 g.drawOval(i * getWidth() / (nodes.size() + 1) - 7, getHeight() / 2 - 7, 14, 14);
-                g.drawString(((String) node.getContent().get(0)).split(" ")[1], i * getWidth() / (nodes.size() + 1) - 3, getHeight() / 2 + 4);
+                g.drawString((String) node.getContent().get("name"), i * getWidth() / (nodes.size() + 1) - 3, getHeight() / 2 + 4);
                 i++;
             }
 

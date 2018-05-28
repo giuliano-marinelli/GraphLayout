@@ -1,7 +1,7 @@
 package graphlayout.graphic;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -11,16 +11,16 @@ public class Edge implements Serializable {
 
     private Node nodeOne;
     private Node nodeTwo;
-    private ArrayList<String> content;
+    private HashMap<String, String> content;
 
     public Edge() {
     }
 
-    public Edge(ArrayList<String> content) {
+    public Edge(HashMap<String, String> content) {
         this.content = content;
     }
 
-    public Edge(Node nodeOne, Node nodeTwo, ArrayList<String> content) {
+    public Edge(Node nodeOne, Node nodeTwo, HashMap<String, String> content) {
         this.nodeOne = nodeOne;
         this.nodeTwo = nodeTwo;
         this.content = content;
@@ -42,16 +42,12 @@ public class Edge implements Serializable {
         this.nodeTwo = nodeTwo;
     }
 
-    public ArrayList<String> getContent() {
+    public HashMap<String, String> getContent() {
         return content;
     }
 
-    public void setContent(ArrayList<String> content) {
+    public void setContent(HashMap<String, String> content) {
         this.content = content;
-    }
-
-    public void addContent(String info) {
-        content.add(info);
     }
 
     public int getDegree() {
@@ -59,11 +55,11 @@ public class Edge implements Serializable {
     }
 
     /*@Override
-    protected Object clone() throws CloneNotSupportedException {
-        Edge cloned = (Edge) super.clone();
-        cloned.setNodeOne((Node) nodeOne.clone());
-        cloned.setNodeTwo((Node) nodeTwo.clone());
-        cloned.setContent((ArrayList<String>) content.clone());
-        return cloned;
-    }*/
+     protected Object clone() throws CloneNotSupportedException {
+     Edge cloned = (Edge) super.clone();
+     cloned.setNodeOne((Node) nodeOne.clone());
+     cloned.setNodeTwo((Node) nodeTwo.clone());
+     cloned.setContent((ArrayList<String>) content.clone());
+     return cloned;
+     }*/
 }

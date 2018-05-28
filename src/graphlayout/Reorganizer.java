@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.HashMap;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -44,10 +45,10 @@ public abstract class Reorganizer {
         //TESTEO DE CLONACION
         /*try {
          Graph<NodeRectangle, EdgeMultiline> g1 = generateCompleteGraph(3);
-         spiralOptimization(g1);
+         linearOptimization(g1);
 
          Graph<NodeRectangle, EdgeMultiline> g2 = generateCompleteGraph(4);
-         spiralOptimization(g2);
+         linearOptimization(g2);
 
          Graph<NodeRectangle, EdgeMultiline> c1 = (Graph<NodeRectangle, EdgeMultiline>) copy(g1);
 
@@ -82,11 +83,10 @@ public abstract class Reorganizer {
          System.out.print("K_" + i + " -> ");
 
          Graph graph = generateCompleteGraph(i);
-         spiralOptimization(graph);
+         linearOptimization(graph);
          int obtCr = graphCrossingNumber(graph);
 
-         double p = i;
-         int cr = (int) ((1.0 / 4.0) * Math.floor(p / 2) * Math.floor((p - 1) / 2) * Math.floor((p - 2) / 2) * Math.floor((p - 3) / 2));
+         int cr = completeGraphCrossingNumber(i);
 
          if (cr == obtCr) {
          System.out.println("CROSSING NUMBER = " + obtCr + " = " + cr);
@@ -95,7 +95,7 @@ public abstract class Reorganizer {
          }
          for (int j = 0; j < 10; j++) {
          Graph randGraph = generateRandomGraph(i);
-         spiralOptimization(randGraph);
+         linearOptimization(randGraph);
          int randCr = graphCrossingNumber(randGraph);
          if (randCr <= cr) {
          System.out.println("    CROSSING NUMBER RAND = " + randCr + " <= " + cr);
@@ -109,28 +109,28 @@ public abstract class Reorganizer {
         //Graph graphFile = importGraph(file);
         //Graph graphComp = generateCompleteGraph(numNodes);
         Graph graphRandom = generateRandomGraph(numNodes);
-        //spiralOptimization(graphFile);
-        //spiralOptimization(graphComp);
-        spiralOptimization(graphRandom);
+        //linearOptimization(graphFile);
+        //linearOptimization(graphComp);
+        linearOptimization(graphRandom);
         //System.out.println("CROSSING NUMBER FILE = " + graphCrossingNumber(graphFile));
         //System.out.println("CROSSING NUMBER COMPLETE = " + graphCrossingNumber(graphComp));
-        System.out.println("CROSSING NUMBER RANDOM = " + graphCrossingNumber(graphRandom));
+        //System.out.println("CROSSING NUMBER RANDOM = " + graphCrossingNumber(graphRandom));
         //GraphPainter graphPainterFile = new GraphPainter(graphFile);
         GraphPainter graphPainterRandom = new GraphPainter(graphRandom);
         //GraphPainter graphPainterComp = new GraphPainter(graphComp);
         //GraphPainter graphPainterComp = new GraphPainter(graphComp, graphPainterFile);
         //GraphPainter graphPainterComp = new GraphPainter(graphComp, graphPainterRandom);
         /*if (reorganize(graphFile)) {
-            System.out.println("Graph reorganized.");
-            xml = exportGraph(graphFile);
-        } else {
-            System.err.println("There was a mistake.");
-        }*/
+         System.out.println("Graph reorganized.");
+         xml = exportGraph(graphFile);
+         } else {
+         System.err.println("There was a mistake.");
+         }*/
         return xml;
     }
 
     public static boolean reorganize(Graph<NodeRectangle, EdgeMultiline> graph) {
-        boolean result = true;
+        boolean result;
         if (result = !nodesCollide(graph)) {
             alignEdgePoints(graph);
         } else {
@@ -139,7 +139,7 @@ public abstract class Reorganizer {
         return result;
     }
 
-    public static void spiralOptimization(Graph<NodeRectangle, EdgeMultiline> graph) {
+    public static void linearOptimization(Graph<NodeRectangle, EdgeMultiline> graph) {
         int cross = 0;
         LinkedList<NodeRectangle> nodes = graph.getNodes();
         //ordena la lista de nodos por su grado
@@ -172,19 +172,19 @@ public abstract class Reorganizer {
             edges = node.getEdges();
             for (EdgeMultiline edge : edges) {
                 //System.out.println(edge.getContent().toString());
-                if (edge.getContent().size() == 1) {
-                    edge.addContent((isTop) ? "1" : "0");
-                } else {
-                    edge.getContent().set(1, ((isTop) ? "1" : "0"));
-                }
+                //if (edge.getContent().size() == 1) {
+                edge.getContent().put("isTop", (isTop) ? "1" : "0");
+                //} else {
+                //edge.getContent().put("isTop", ((isTop) ? "1" : "0"));
+                //}
             }
             if (isTop) {
                 nodesAux.addFirst(node);
-                node.addContent("1");
+                node.getContent().put("isTop", "1");
                 isTop = false;
             } else {
                 nodesAux.addLast(node);
-                node.addContent("0");
+                node.getContent().put("isTop", "1");
                 isTop = true;
             }
         }
@@ -192,31 +192,31 @@ public abstract class Reorganizer {
         int i = 0;
         //asigna a los nodos un orden posicional
         for (NodeRectangle node : nodes) {
-            node.addContent(i + "");
+            node.getContent().put("order", i + "");
             i++;
         }
 
         graph.setNodes(nodes);
 
         /*for (NodeRectangle node : nodes) {
-         System.out.print(node.getContent().get(0));
+         System.out.print(node.getContent().get("name"));
          System.out.print(" -> I(" + nodes.indexOf(node) + ")");
-         System.out.print(" -> O(" + node.getContent().get(3) + ")");
+         System.out.print(" -> O(" + node.getContent().get("order") + ")");
          System.out.print(" -> EDG(" + node.getEdges().size() + ")");
-         System.out.println(" -> " + ((node.getContent().get(2).equals("1")) ? "arriba" : "abajo"));
+         System.out.println(" -> " + ((node.getContent().get("isTop").equals("1")) ? "arriba" : "abajo"));
 
          edges = node.getEdges();
          for (EdgeMultiline edge : edges) {
-         System.out.print("    [" + edge.getContent().get(0));
-         System.out.println(", " + ((edge.getContent().get(1).equals("1")) ? "arriba" : "abajo") + "]");
+         System.out.print("    [" + edge.getContent().get("name"));
+         System.out.println(", " + ((edge.getContent().get("isTop").equals("1")) ? "arriba" : "abajo") + "]");
          }
          }*/
         //optimizaciones
-        firstOptimization(graph);
+        firstLinearOptimization(graph);
         //secondOptimization(graph);
     }
 
-    public static void firstOptimization(Graph<NodeRectangle, EdgeMultiline> graph) {
+    public static void firstLinearOptimization(Graph<NodeRectangle, EdgeMultiline> graph) {
         LinkedList<NodeRectangle> nodes = graph.getNodes();
         int numNodes = nodes.size();
         int optimizeNumber = (numNodes > 5) ? ((numNodes / 2) - 2) : 0;
@@ -239,14 +239,14 @@ public abstract class Reorganizer {
                 isTop = true;
             }
             for (EdgeMultiline edge : edges) {
-                int ordEdgeNodeOne = Integer.parseInt(edge.getNodeOne().getContent().get(3) + "");
-                int ordEdgeNodeTwo = Integer.parseInt(edge.getNodeTwo().getContent().get(3) + "");
+                int ordEdgeNodeOne = Integer.parseInt(edge.getNodeOne().getContent().get("order") + "");
+                int ordEdgeNodeTwo = Integer.parseInt(edge.getNodeTwo().getContent().get("order") + "");
                 if (Math.abs(ordEdgeNodeOne - ordEdgeNodeTwo) <= numChanges + 1
                         && Math.abs(ordEdgeNodeOne - ordEdgeNodeTwo) > 1) {
-                    edge.getContent().set(1, ((edge.getContent().get(1).equals("1")) ? "0" : "1"));
+                    edge.getContent().put("isTop", ((edge.getContent().get("isTop").equals("1")) ? "0" : "1"));
                     newCrossNum = graphCrossingNumber(graph);
                     if (crossNum < newCrossNum) {
-                        edge.getContent().set(1, ((edge.getContent().get(1).equals("1")) ? "0" : "1"));
+                        edge.getContent().put("isTop", ((edge.getContent().get("isTop").equals("1")) ? "0" : "1"));
                     } else {
                         crossNum = newCrossNum;
                     }
@@ -257,29 +257,29 @@ public abstract class Reorganizer {
         }
     }
 
-    public static void secondOptimization(Graph<NodeRectangle, EdgeMultiline> graph) {
+    public static void secondLinearOptimization(Graph<NodeRectangle, EdgeMultiline> graph) {
         boolean isTop;
         int crossNum = graphCrossingNumber(graph);
         int newCrossNum;
         LinkedList<EdgeMultiline> edges = graph.getEdges();
         for (EdgeMultiline edgeOne : edges) {
-            isTop = edgeOne.getContent().get(1).equals("1");
-            int ordEdgeOneNodeOne = Integer.parseInt(edgeOne.getNodeOne().getContent().get(3) + "");
-            int ordEdgeOneNodeTwo = Integer.parseInt(edgeOne.getNodeTwo().getContent().get(3) + "");
+            isTop = edgeOne.getContent().get("isTop").equals("1");
+            int ordEdgeOneNodeOne = Integer.parseInt(edgeOne.getNodeOne().getContent().get("order") + "");
+            int ordEdgeOneNodeTwo = Integer.parseInt(edgeOne.getNodeTwo().getContent().get("order") + "");
             for (EdgeMultiline edgeTwo : edges) {
-                if (edgeTwo.getContent().get(1).equals("1") == isTop) {
-                    int ordEdgeTwoNodeOne = Integer.parseInt(edgeTwo.getNodeOne().getContent().get(3) + "");
-                    int ordEdgeTwoNodeTwo = Integer.parseInt(edgeTwo.getNodeTwo().getContent().get(3) + "");
+                if (edgeTwo.getContent().get("isTop").equals("1") == isTop) {
+                    int ordEdgeTwoNodeOne = Integer.parseInt(edgeTwo.getNodeOne().getContent().get("order") + "");
+                    int ordEdgeTwoNodeTwo = Integer.parseInt(edgeTwo.getNodeTwo().getContent().get("order") + "");
                     if (Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                             && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                             && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)) {
-                        edgeOne.getContent().set(1, ((edgeOne.getContent().get(1).equals("1")) ? "0" : "1"));
+                        edgeOne.getContent().put("isTop", ((edgeOne.getContent().get("isTop").equals("1")) ? "0" : "1"));
                         newCrossNum = graphCrossingNumber(graph);
                         if (crossNum <= newCrossNum) {
-                            edgeOne.getContent().set(1, ((edgeOne.getContent().get(1).equals("1")) ? "0" : "1"));
+                            edgeOne.getContent().put("isTop", ((edgeOne.getContent().get("isTop").equals("1")) ? "0" : "1"));
                         } else {
                             crossNum = newCrossNum;
-                            secondOptimization(graph);
+                            secondLinearOptimization(graph);
                         }
                     }
                 }
@@ -434,9 +434,7 @@ public abstract class Reorganizer {
                     Graph<NodeRectangle, EdgeMultiline> neighbor = (Graph<NodeRectangle, EdgeMultiline>) copy(graph);
                     swapNodesOrder(graph, i, j);
                     population.add(neighbor);
-                } catch (IOException ex) {
-                    Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                } catch (IOException | ClassNotFoundException ex) {
                     Logger.getLogger(Reorganizer.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -457,7 +455,7 @@ public abstract class Reorganizer {
     private static void edgeCurveMutation(Graph<NodeRectangle, EdgeMultiline> graph) {
         Random random = new Random();
         EdgeMultiline randEdge = graph.getEdges().get(random.nextInt(graph.getEdges().size()));
-        invertCurve(graph, Integer.parseInt(randEdge.getNodeOne().getContent().get(3) + ""), Integer.parseInt(randEdge.getNodeTwo().getContent().get(3) + ""));
+        invertCurve(graph, Integer.parseInt(randEdge.getNodeOne().getContent().get("order") + ""), Integer.parseInt(randEdge.getNodeTwo().getContent().get("order") + ""));
     }
 
     public static int graphCrossingNumber(Graph<NodeRectangle, EdgeMultiline> graph) {
@@ -465,13 +463,13 @@ public abstract class Reorganizer {
         boolean isTop;
         LinkedList<EdgeMultiline> edges = graph.getEdges();
         for (EdgeMultiline edgeOne : edges) {
-            isTop = edgeOne.getContent().get(1).equals("1");
-            int ordEdgeOneNodeOne = Integer.parseInt(edgeOne.getNodeOne().getContent().get(3) + "");
-            int ordEdgeOneNodeTwo = Integer.parseInt(edgeOne.getNodeTwo().getContent().get(3) + "");
+            isTop = edgeOne.getContent().get("isTop").equals("1");
+            int ordEdgeOneNodeOne = Integer.parseInt(edgeOne.getNodeOne().getContent().get("order") + "");
+            int ordEdgeOneNodeTwo = Integer.parseInt(edgeOne.getNodeTwo().getContent().get("order") + "");
             for (EdgeMultiline edgeTwo : edges) {
-                if (edgeTwo.getContent().get(1).equals("1") == isTop) {
-                    int ordEdgeTwoNodeOne = Integer.parseInt(edgeTwo.getNodeOne().getContent().get(3) + "");
-                    int ordEdgeTwoNodeTwo = Integer.parseInt(edgeTwo.getNodeTwo().getContent().get(3) + "");
+                if (edgeTwo.getContent().get("isTop").equals("1") == isTop) {
+                    int ordEdgeTwoNodeOne = Integer.parseInt(edgeTwo.getNodeOne().getContent().get("order") + "");
+                    int ordEdgeTwoNodeTwo = Integer.parseInt(edgeTwo.getNodeTwo().getContent().get("order") + "");
                     if (Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                             && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                             && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)) {
@@ -489,17 +487,21 @@ public abstract class Reorganizer {
         return cross;
     }
 
+    public static int completeGraphCrossingNumber(int numNodes) {
+        return (int) ((1.0 / 4.0) * Math.floor(numNodes / 2) * Math.floor((numNodes - 1) / 2) * Math.floor((numNodes - 2) / 2) * Math.floor((numNodes - 3) / 2));
+    }
+
     public static int edgeCrossingNumber(Graph<NodeRectangle, EdgeMultiline> graph, EdgeMultiline edgeOne) {
         int cross = 0;
         boolean isTop;
         LinkedList<EdgeMultiline> edges = graph.getEdges();
-        isTop = edgeOne.getContent().get(1).equals("1");
-        int ordEdgeOneNodeOne = Integer.parseInt(edgeOne.getNodeOne().getContent().get(3) + "");
-        int ordEdgeOneNodeTwo = Integer.parseInt(edgeOne.getNodeTwo().getContent().get(3) + "");
+        isTop = edgeOne.getContent().get("isTop").equals("1");
+        int ordEdgeOneNodeOne = Integer.parseInt(edgeOne.getNodeOne().getContent().get("order") + "");
+        int ordEdgeOneNodeTwo = Integer.parseInt(edgeOne.getNodeTwo().getContent().get("order") + "");
         for (EdgeMultiline edgeTwo : edges) {
-            if (edgeTwo.getContent().get(1).equals("1") == isTop) {
-                int ordEdgeTwoNodeOne = Integer.parseInt(edgeTwo.getNodeOne().getContent().get(3) + "");
-                int ordEdgeTwoNodeTwo = Integer.parseInt(edgeTwo.getNodeTwo().getContent().get(3) + "");
+            if (edgeTwo.getContent().get("isTop").equals("1") == isTop) {
+                int ordEdgeTwoNodeOne = Integer.parseInt(edgeTwo.getNodeOne().getContent().get("order") + "");
+                int ordEdgeTwoNodeTwo = Integer.parseInt(edgeTwo.getNodeTwo().getContent().get("order") + "");
                 if ((Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                         && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                         && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo))
@@ -517,13 +519,13 @@ public abstract class Reorganizer {
         LinkedList<EdgeMultiline> crossEdges = new LinkedList<>();
         boolean isTop;
         LinkedList<EdgeMultiline> edges = graph.getEdges();
-        isTop = edgeOne.getContent().get(1).equals("1");
-        int ordEdgeOneNodeOne = Integer.parseInt(edgeOne.getNodeOne().getContent().get(3) + "");
-        int ordEdgeOneNodeTwo = Integer.parseInt(edgeOne.getNodeTwo().getContent().get(3) + "");
+        isTop = edgeOne.getContent().get("isTop").equals("1");
+        int ordEdgeOneNodeOne = Integer.parseInt(edgeOne.getNodeOne().getContent().get("order") + "");
+        int ordEdgeOneNodeTwo = Integer.parseInt(edgeOne.getNodeTwo().getContent().get("order") + "");
         for (EdgeMultiline edgeTwo : edges) {
-            if (edgeTwo.getContent().get(1).equals("1") == isTop) {
-                int ordEdgeTwoNodeOne = Integer.parseInt(edgeTwo.getNodeOne().getContent().get(3) + "");
-                int ordEdgeTwoNodeTwo = Integer.parseInt(edgeTwo.getNodeTwo().getContent().get(3) + "");
+            if (edgeTwo.getContent().get("isTop").equals("1") == isTop) {
+                int ordEdgeTwoNodeOne = Integer.parseInt(edgeTwo.getNodeOne().getContent().get("order") + "");
+                int ordEdgeTwoNodeTwo = Integer.parseInt(edgeTwo.getNodeTwo().getContent().get("order") + "");
                 if ((Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                         && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) < Math.max(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
                         && Math.max(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)) /*|| (Math.min(ordEdgeOneNodeOne, ordEdgeOneNodeTwo) > Math.min(ordEdgeTwoNodeOne, ordEdgeTwoNodeTwo)
@@ -683,10 +685,11 @@ public abstract class Reorganizer {
                     customCode = "";
                 }
 
+                HashMap<String, String> content = new HashMap<>();
+                content.put("attributes", panelAttributes);
+
                 if (id.equals("Relation")) {
                     LinkedList<Line2D> lines = new LinkedList<>();
-                    ArrayList<String> content = new ArrayList<>();
-                    content.add(panelAttributes);
 
                     String[] values = additAttributes.split(";");
                     for (int k = 0; k < values.length - 2; k = k + 2) {
@@ -695,17 +698,14 @@ public abstract class Reorganizer {
                     }
                     edges.add(new EdgeMultiline(lines, content));
                 } else {
-                    ArrayList<String> content = new ArrayList<>();
-                    content.add(panelAttributes);
-
                     if (type.equals("")) {
                         Rectangle rectangle = new Rectangle(x, y, w + 1, h + 1);
-                        content.add(id);
+                        content.put("name", id);
                         nodes.add(new NodeRectangle(rectangle, content));
                     } else {
                         Rectangle rectangle = new Rectangle(x, y, w, h);
-                        content.add(type);
-                        content.add(customCode);
+                        content.put("type", type);
+                        content.put("customCode", customCode);
                         nodes.add(new NodeRectangle(rectangle, content));
                     }
                 }
@@ -749,11 +749,11 @@ public abstract class Reorganizer {
             diagram.addContent(element);
 
             boolean isCustom = false;
-            if (node.getContent().get(1).equals("CustomElementImpl")) {
-                element.addContent(new Element("type").setText(node.getContent().get(1).toString()));
+            if (node.getContent().get("type").equals("CustomElementImpl")) {
+                element.addContent(new Element("type").setText(node.getContent().get("type").toString()));
                 isCustom = true;
             } else {
-                element.addContent(new Element("id").setText(node.getContent().get(1).toString()));
+                element.addContent(new Element("id").setText(node.getContent().get("type").toString()));
             }
             Element coordinates = new Element("coordinates");
             element.addContent(coordinates);
@@ -761,11 +761,11 @@ public abstract class Reorganizer {
             coordinates.addContent(new Element("x").setText((int) node.getRectangle().getX() + ""));
             coordinates.addContent(new Element("y").setText((int) node.getRectangle().getY() + ""));
 
-            element.addContent(new Element("panel_attributes").setText(node.getContent().get(0).toString()));
+            element.addContent(new Element("panel_attributes").setText(node.getContent().get("attributes").toString()));
             element.addContent(new Element("additional_attributes"));
 
             if (isCustom) {
-                element.addContent(new Element("custom_code").setText(node.getContent().get(2).toString()));
+                element.addContent(new Element("custom_code").setText(node.getContent().get("customCode").toString()));
                 coordinates.addContent(new Element("w").setText((int) node.getRectangle().getWidth() + ""));
                 coordinates.addContent(new Element("h").setText((int) node.getRectangle().getHeight() + ""));
             } else {
@@ -783,7 +783,7 @@ public abstract class Reorganizer {
             Element coordinates = new Element("coordinates");
             element.addContent(coordinates);
 
-            element.addContent(new Element("panel_attributes").setText(edge.getContent().get(0)));
+            element.addContent(new Element("panel_attributes").setText(edge.getContent().get("attributes")));
 
             Element additionalAttributes = new Element("additional_attributes");
             element.addContent(additionalAttributes);
@@ -857,15 +857,15 @@ public abstract class Reorganizer {
         Graph completeGraph = new Graph();
         LinkedList<NodeRectangle> nodes = completeGraph.getNodes();
         for (int i = 0; i < numberNodes; i++) {
-            ArrayList<String> nodeContent = new ArrayList<>();
-            nodeContent.add("node " + i);
-            nodeContent.add("node");
+            HashMap<String, String> nodeContent = new HashMap<>();
+            nodeContent.put("name", i + "");
+            nodeContent.put("type", "node");
             NodeRectangle newNode = new NodeRectangle(null, nodeContent);
             completeGraph.addNode(newNode);
             for (NodeRectangle node : nodes) {
                 if (node != newNode) {
-                    ArrayList<String> edgeContent = new ArrayList<>();
-                    edgeContent.add(node.getContent().get(0) + "->" + newNode.getContent().get(0));
+                    HashMap<String, String> edgeContent = new HashMap<>();
+                    edgeContent.put("name", node.getContent().get("name") + "->" + newNode.getContent().get("name"));
                     EdgeMultiline newEdge = new EdgeMultiline(null, node, newNode, edgeContent);
                     completeGraph.addEdge(newEdge);
                     node.addEdge(newEdge);
@@ -880,9 +880,9 @@ public abstract class Reorganizer {
         Graph randomGraph = new Graph();
         LinkedList<NodeRectangle> nodes = randomGraph.getNodes();
         for (int i = 0; i < numberNodes; i++) {
-            ArrayList<String> nodeContent = new ArrayList<>();
-            nodeContent.add("node " + i);
-            nodeContent.add("node");
+            HashMap<String, String> nodeContent = new HashMap<>();
+            nodeContent.put("name", i + "");
+            nodeContent.put("type", "node");
             NodeRectangle newNode = new NodeRectangle(null, nodeContent);
             randomGraph.addNode(newNode);
         }
@@ -895,15 +895,15 @@ public abstract class Reorganizer {
                 LinkedList<Integer> visitedIndex = new LinkedList<>();
                 finishedIndex.add(nodes.indexOf(node));
                 for (int i = 0; i < amountEdges; i++) {
-                    NodeRectangle toNode = null;
+                    NodeRectangle toNode;
                     int toNodeIndex = -1;
                     do {
                         toNodeIndex = random.nextInt(numberNodes);
                     } while (visitedIndex.contains(toNodeIndex) || finishedIndex.contains(toNodeIndex));
                     visitedIndex.add(toNodeIndex);
                     toNode = nodes.get(toNodeIndex);
-                    ArrayList<String> edgeContent = new ArrayList<>();
-                    edgeContent.add(node.getContent().get(0) + "->" + toNode.getContent().get(0));
+                    HashMap<String, String> edgeContent = new HashMap<>();
+                    edgeContent.put("name", node.getContent().get("name") + "->" + toNode.getContent().get("name"));
                     EdgeMultiline newEdge = new EdgeMultiline(null, node, toNode, edgeContent);
                     randomGraph.addEdge(newEdge);
                     node.addEdge(newEdge);
@@ -927,9 +927,9 @@ public abstract class Reorganizer {
         if (indexOne >= 0 && indexOne < graph.getNodes().size()
                 && indexTwo >= 0 && indexTwo < graph.getNodes().size()) {
             LinkedList<NodeRectangle> nodes = graph.getNodes();
-            Object orderAux = nodes.get(indexTwo).getContent().get(3);
-            nodes.get(indexTwo).getContent().set(3, nodes.get(indexOne).getContent().get(3));
-            nodes.get(indexOne).getContent().set(3, orderAux);
+            Object orderAux = nodes.get(indexTwo).getContent().get("order");
+            nodes.get(indexTwo).getContent().put("order", nodes.get(indexOne).getContent().get("order"));
+            nodes.get(indexOne).getContent().put("order", orderAux);
             Collections.swap(nodes, indexOne, indexTwo);
         }
     }
@@ -947,10 +947,10 @@ public abstract class Reorganizer {
             }
         }
         if (targetEdge != null) {
-            if (targetEdge.getContent().get(1).equals("1")) {
-                targetEdge.getContent().set(1, "0");
+            if (targetEdge.getContent().get("isTop").equals("1")) {
+                targetEdge.getContent().put("isTop", "0");
             } else {
-                targetEdge.getContent().set(1, "1");
+                targetEdge.getContent().put("isTop", "1");
             }
         }
     }

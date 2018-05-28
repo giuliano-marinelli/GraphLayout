@@ -2,7 +2,7 @@ package graphlayout.graphic;
 
 import java.awt.geom.Line2D;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -17,12 +17,12 @@ public class EdgeMultiline extends Edge implements Serializable {
         this.lines = lines;
     }
 
-    public EdgeMultiline(LinkedList<Line2D> lines, ArrayList<String> content) {
+    public EdgeMultiline(LinkedList<Line2D> lines, HashMap<String, String> content) {
         super(content);
         this.lines = lines;
     }
 
-    public EdgeMultiline(LinkedList<Line2D> lines, Node nodeOne, Node nodeTwo, ArrayList<String> content) {
+    public EdgeMultiline(LinkedList<Line2D> lines, Node nodeOne, Node nodeTwo, HashMap<String, String> content) {
         super(nodeOne, nodeTwo, content);
         this.lines = lines;
     }
@@ -36,9 +36,9 @@ public class EdgeMultiline extends Edge implements Serializable {
     }
 
     /*@Override
-    protected Object clone() throws CloneNotSupportedException {
-        EdgeMultiline cloned = (EdgeMultiline) super.clone();
-        cloned.setLines((LinkedList<Line2D>) lines.clone());
-        return cloned;
-    }*/
+     protected Object clone() throws CloneNotSupportedException {
+     EdgeMultiline cloned = (EdgeMultiline) super.clone();
+     cloned.setLines((LinkedList<Line2D>) lines.clone());
+     return cloned;
+     }*/
 }
